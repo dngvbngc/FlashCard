@@ -124,6 +124,7 @@ public class Set {
                 cards.put(term, definition);
             }
 
+            connection.close();
             return cards;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -155,6 +156,7 @@ public class Set {
     }
 
     public void addTerms(Hashtable<String, String> newCards) {
+
         // Update database with new cards
         try {
             Class.forName("org.sqlite.JDBC");
@@ -169,15 +171,14 @@ public class Set {
                     pstmt.setString(2, value);
                     int rowsAffected = pstmt.executeUpdate();
                     System.out.println(rowsAffected + " row(s) inserted: Term: " + key + ", Definition: " + value);
+                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    throw new RuntimeException("Unable to update database.");
                 }
             });
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Unable to connect to database.");
-        }    
+        } 
     }
 
     public void deleteTerm(String term) {
@@ -192,13 +193,12 @@ public class Set {
                     pstmt.setString(1, term);
                     int rowsAffected = pstmt.executeUpdate();
                     System.out.println(rowsAffected + " row(s) deleted: Term: " + term + ".");
+                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    throw new RuntimeException("Unable to update database.");
                 }
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
-                throw new RuntimeException("Unable to connect to database.");
             }
     }
 }

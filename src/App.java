@@ -121,7 +121,7 @@ public class App {
                             scanner.nextLine();
                             correctAnswer = (mode >= 1 && mode <= 7);;
                             if (!correctAnswer) {
-                                System.out.println("Invalid command. Please enter a number from 1 to 7: ");
+                                System.out.println("Invalid command. Please enter a number from 1 to 7.");
                             }
                         } catch (Exception e) {
                             System.out.println("Invalid command. Please enter a number from 1 to 7.");
@@ -179,15 +179,20 @@ public class App {
                     } else if (mode == 4) {
                         user.printSets();
                         int id = 0;
+                        
                         boolean success = false;
-
                         while(!success) {
                             while (id <= 0) {
                                 System.out.print("Access set with ID: ");
-                                id = scanner.nextInt();
-                                scanner.nextLine();
+                                try {
+                                    id = scanner.nextInt();
+                                    scanner.nextLine();
+                                    success = user.goToSet(id);
+                                } catch (Exception e) {
+                                    System.out.println("Please enter a valid numeric set ID.");
+                                    scanner.nextLine();
+                                }
                             }
-                            success = user.goToSet(id);
                             id = 0;
                         }
 
@@ -235,7 +240,7 @@ public class App {
                             scanner.nextLine();
                             correctAnswer = (mode >= 1 && mode <= 7);;
                             if (!correctAnswer) {
-                                System.out.println("Invalid command. Please enter a number from 1 to 7: ");
+                                System.out.println("Invalid command. Please enter a number from 1 to 7.");
                             }
                         } catch (Exception e) {
                             System.out.println("Invalid command. Please enter a number from 1 to 7.");
@@ -445,10 +450,20 @@ public class App {
                         Hashtable<String, String> oldCards = currentSet.getCards();
                         Hashtable<String, String> newCards = new Hashtable<>();
 
-                        while (nTerms <= 0) {
+                        correctAnswer = false;
+                        while (!correctAnswer) {
                             System.out.print("Number of terms to add: ");
-                            nTerms = scanner.nextInt();
-                            scanner.nextLine();
+                            try {
+                                nTerms = scanner.nextInt();
+                                scanner.nextLine();
+                                correctAnswer = (nTerms > 0);;
+                                if (!correctAnswer) {
+                                    System.out.println("Invalid command. Please enter a positive number.");
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Invalid command. Please enter a positive number.");
+                                scanner.nextLine();
+                            }
                         }
 
                         // Add new cards with user's input

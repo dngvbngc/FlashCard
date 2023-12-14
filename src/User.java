@@ -69,7 +69,7 @@ public class User {
                     this.currentSet = 0;
                 } else {
                     // Handle case where no user with the given ID was found
-                    throw new RuntimeException("User with ID " + id + " not found");
+                    throw new RuntimeException("User with ID " + id + " not found.");
                 }
 
                 // Close 
@@ -219,6 +219,7 @@ public class User {
     }
 
     public boolean goToSet(int id) {
+        boolean success;
         try {
                 Class.forName("org.sqlite.JDBC");
                 String url = "jdbc:sqlite:data/flashcards.db";
@@ -231,12 +232,18 @@ public class User {
                 
                 if (resultSet.next()) {
                     this.currentSet = id;
-                    return true;
+                    success = true;
                 } else {
                     // Handle case where no user with the given ID was found
-                    System.out.println("Set with ID " + id + " not found");
-                    return false;
+                    System.out.println("Set with ID " + id + " not found.");
+                    success = false;
                 }
+
+                // Close 
+                resultSet.close();
+                pstmt.close();
+                connection.close();
+                return success;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
                 System.out.println("Retrieving user was unsuccessful.");
