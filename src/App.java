@@ -228,9 +228,9 @@ public class App {
                     } else if (mode == 2) {
                         // Setting study mode (case sensitivity) 
                         System.out.println("It's study time! Choose mode:\nA. Study definitions\nB. Study terms");
-                        System.out.print("Mode (A/B): ");
                         answer = "";
                         while (!answer.equals("a") && !answer.equals("b")) {
+                            System.out.print("Mode (A/B): ");
                             answer = scanner.next().toLowerCase();
                             scanner.nextLine();
                         }
@@ -240,8 +240,8 @@ public class App {
 
                         // Setting test mode (term or definition) 
                         System.out.println("Choose mode:\nA. Case sensitive\nB. Case insensitive");
-                        System.out.print("Mode (A/B): ");
                         while (!answer.equals("a") && !answer.equals("b")) {
+                            System.out.print("Mode (A/B): ");
                             answer = scanner.next().toLowerCase();
                             scanner.nextLine();
                         }
@@ -327,8 +327,10 @@ public class App {
                                     }
                                 }
                         
-                                testedIndex.add(currentIndex);
-                                i++;
+                                if (counter < 3) {
+                                    testedIndex.add(currentIndex);
+                                    i++;
+                                }
                             }
                         }
                         System.out.println("Congratulations on finishing studying this test!");
@@ -336,9 +338,9 @@ public class App {
                     } else if (mode == 3) {
                         // Setting test mode (case sensitivity) 
                         System.out.println("It's test time! Choose mode:\nA. Test with definitions\nB. Test with terms");
-                        System.out.print("Mode (A/B): ");
                         answer = "";
                         while (!answer.toLowerCase().equals("a") && !answer.toLowerCase().equals("b")) {
+                            System.out.print("Mode (A/B): ");
                             answer = scanner.next();
                             scanner.nextLine();
                         }
@@ -348,8 +350,8 @@ public class App {
 
                         // Setting test mode (term or definition) 
                         System.out.println("Choose mode:\nA. Case sensitive\nB. Case insensitive");
-                        System.out.print("Mode (A/B): ");
                         while (!answer.toLowerCase().equals("a") && !answer.toLowerCase().equals("b")) {
+                            System.out.print("Mode (A/B): ");
                             answer = scanner.next();
                             scanner.nextLine();
                         }
