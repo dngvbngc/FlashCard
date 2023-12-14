@@ -113,10 +113,16 @@ public class App {
                     System.out.println("6. Log out");
                     System.out.println("7. Exit");
                 
-                    while (mode <= 0 | mode > 7) {
+                    boolean correctAnswer = false;
+                    while (correctAnswer) {
                         System.out.print("Enter your action (1-7): ");
-                        mode = scanner.nextInt();
-                        scanner.nextLine();
+                        try {
+                            mode = scanner.nextInt();
+                            scanner.nextLine();
+                            correctAnswer = mode <= 0 | mode > 7;
+                        } catch (Exception e) {
+                            System.out.print("Invalid command. Please enter a number from 1 to 7.");
+                        }
                     }
                 
                     if (mode == 1) {
