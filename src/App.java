@@ -114,14 +114,18 @@ public class App {
                     System.out.println("7. Exit");
                 
                     boolean correctAnswer = false;
-                    while (correctAnswer) {
+                    while (!correctAnswer) {
                         System.out.print("Enter your action (1-7): ");
                         try {
                             mode = scanner.nextInt();
                             scanner.nextLine();
-                            correctAnswer = mode <= 0 | mode > 7;
+                            correctAnswer = (mode >= 1 && mode <= 7);;
+                            if (!correctAnswer) {
+                                System.out.println("Invalid command. Please enter a number from 1 to 7: ");
+                            }
                         } catch (Exception e) {
-                            System.out.print("Invalid command. Please enter a number from 1 to 7.");
+                            System.out.println("Invalid command. Please enter a number from 1 to 7.");
+                            scanner.nextLine();
                         }
                     }
                 
@@ -223,10 +227,20 @@ public class App {
                     System.out.println("6. Go back to main menu");
                     System.out.println("7. Exit");
 
-                    while (mode <= 0 | mode > 7) {
+                    boolean correctAnswer = false;
+                    while (!correctAnswer) {
                         System.out.print("Enter your action (1-7): ");
-                        mode = scanner.nextInt();
-                        scanner.nextLine();
+                        try {
+                            mode = scanner.nextInt();
+                            scanner.nextLine();
+                            correctAnswer = (mode >= 1 && mode <= 7);;
+                            if (!correctAnswer) {
+                                System.out.println("Invalid command. Please enter a number from 1 to 7: ");
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Invalid command. Please enter a number from 1 to 7.");
+                            scanner.nextLine();
+                        }
                     }
 
                     if (mode == 1) {
