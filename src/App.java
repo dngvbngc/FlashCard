@@ -164,13 +164,14 @@ public class App {
                         mode = 0;
                     } else if (mode == 3) {
                         try {
-                            System.out.print("Name of new set: ");
-                            String name = scanner.next();
-                            scanner.nextLine();
                             System.out.print("Subject: ");
                             String subject = scanner.next();
                             scanner.nextLine();
 
+                            System.out.print("Name of new set: ");
+                            String name = scanner.next();
+                            scanner.nextLine();
+                            
                             user.addSet(name, subject);
                         } catch (RuntimeException e) {
                             e.getMessage();
