@@ -2,7 +2,7 @@
 
 ## Deliverables:
  - Final codebase
- - Annotated architecture diagram (see architecture_diagram.jpg)
+ - Annotated architecture diagram (see architecture_diagram.png)
  - Design justification (below)
  - `cheatsheet.md`
  - `rubric.md`
@@ -36,4 +36,4 @@
     2. On demo day, I noticed many testers was surprised that the prompt for `subject` appeared after the prompt for `set name`, because they had already put the name of the subject in the set name. Therefore, I moved the prompt for the `subject` before the prompt for the `set name`.
 
  - If you could go back in time and give your past self some **advice** about this project, what hints would you give?
-    - Remember to close all instances of Connection after using them. Forgetting to close a connection might yeild unexpected SQL-BUSY Exceptions. 
+    - Remember to close all instances of Connection after using them. Forgetting to close a connection might yield unexpected SQL-BUSY Exceptions. 
