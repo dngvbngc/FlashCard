@@ -5,11 +5,21 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;  
 
+/** A class representing a user */
 public class User {
     
+    /** The unique auto-generated ID of the user */
     private int id;
+
+    /** Indicates whether the user is interacting with an available set */
     private int currentSet;
 
+    /** Constructor to make a new user.
+     * @param username The username of the new user
+     * @param name The name of the user
+     * @param password The unhashed password of the user
+     * @param isNew True (insert new information into the database)/ False (do not update the data)
+     */
     public User(String username, String name, String password, boolean isNew) {
         Hash hasher = new Hash();
         password = hasher.generateHash(password);
@@ -41,10 +51,8 @@ public class User {
                 connection.close();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-                throw new RuntimeException("Creating new user was unsuccessful. Unable to connect to database.");
             } catch (SQLException e) {
                 e.printStackTrace();
-                throw new RuntimeException("Creating new user was unsuccessful. Try a different username.");
             }
         } else {
             // To declare a user who has not logged in
@@ -53,7 +61,10 @@ public class User {
         }
     }
 
-    /* To create a user who already has an account */
+    /** To create a new instance of an existing user
+     * @param id The user's ID
+     * @throws RuntimeException if unable to access the database or invalid ID
+     */
     public User(int id) {
         try {
                 Class.forName("org.sqlite.JDBC");
@@ -85,10 +96,17 @@ public class User {
             }
     }
 
+    /** Accessor for the user's ID
+     * @return The user's ID
+     */
     public int getID() {
         return this.id;
     }
 
+    /** Accessor for the user's name
+     * @return The user's name
+     * @throws RuntimeException if unable to access the database
+     */
     public String getName() {
         try {
                 Class.forName("org.sqlite.JDBC");
@@ -115,6 +133,10 @@ public class User {
             }
     }
 
+    /** Retrieving the hashed password of the user from the database
+     * @return The user's password (hashed)
+     * @throws RuntimeException if unable to access the database
+     */
     public String getPassword() {
         String url = "jdbc:sqlite:data/flashcards.db";
         String password = "";
@@ -147,6 +169,10 @@ public class User {
             }
     }
 
+    /** Updating the user's password
+     * @param newPassword The user's new password (unhashed)
+     * @throws RuntimeException if unable to update the database
+     */
     public void changePassword(String newPassword) {
         Hash hasher = new Hash();
         String hashedPassword = hasher.generateHash(newPassword);
@@ -175,6 +201,9 @@ public class User {
         }
     }
 
+    /** Print all of the user's available sets in a formatted roster 
+     * @throws RuntimeException if unable to access the database
+     */
     public void printSets() {
         try {
                 Class.forName("org.sqlite.JDBC");
@@ -213,11 +242,19 @@ public class User {
             }
     }
 
+    /** Add a new set to the user's account
+     * @param name The name of the new set
+     * @param subject The subject of the new set
+     */
     public void addSet(String name, String subject) {
         Set mySet = new Set(this.id, name, subject, true);
         this.currentSet = mySet.getID();
     }
 
+    /** Go to an existing set to perform actions such as study and test
+     * @param id The ID of the set to go to
+     * @return True (successfully accessed the set) / False (unable to access the set)
+     */
     public boolean goToSet(int id) {
         boolean success;
         try {
@@ -255,14 +292,22 @@ public class User {
             }
     }
 
+    /** Exit the current set */
     public void exitSet() {
         this.currentSet = 0;
     }
 
+    /** Retrieve the current set's ID
+     * @return The current set's ID
+     */
     public int getCurrentSet() {
         return this.currentSet;
     }
 
+    /** Delete a set from the user's account
+     * @param id The ID of the set to delete
+     * @return True (successfully deleted set)/ False (unable to delete set)
+     */
     public boolean deleteSet(int id) {
 
         // Update database
@@ -298,8 +343,6 @@ public class User {
                 return false;
             }
         }
-
         return true;
-
     } 
 }

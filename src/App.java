@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;  
 
-/* To run the application */
+/** The main application */
 public class App {
     public static void main(String[] args) {
 
@@ -28,15 +28,19 @@ public class App {
             /* Ensure user log in before proceeding */
             while (!exit) {
                 while (!loggedIn) {
+
+                    // Print menu
                     System.out.println("** Welcome to FLASHCARDS! Log in or create new user to begin. **");
                     System.out.println("A. Log in\nB. Create new user\nC. Exit");
                     
+                    // Take user's input
                     while (!answer.equals("a") && !answer.equals("b") && !answer.equals("c")) {
                         System.out.print("Your choice (A/B/C): ");
                         answer = scanner.next().toLowerCase();
                         scanner.nextLine();
                     }
 
+                    // Make new user
                     if (answer.equals("b")) {
 
                         System.out.print("Enter your first name: ");
@@ -61,6 +65,7 @@ public class App {
 
                         answer = "";
                     } else if (answer.equals("a")) {
+                        // Log in existing user
                         System.out.print("Enter your username: ");
                         String username = scanner.next().toLowerCase().trim();
                         scanner.nextLine();
@@ -96,14 +101,17 @@ public class App {
                             e.printStackTrace();
                         }
                     } else if (answer.equals("c")) {
+                        // Terminate the program
                         exit = true;
                         break;
                     } 
                 }
 
+                // For logged in user not interacting with a set
                 while (user.getCurrentSet() == 0 & loggedIn) {
                     int mode = 0;
 
+                    // Print options
                     System.out.println("Hello " + user.getName() + ". What would you like to do?");
                     System.out.println("1. Change password");
                     System.out.println("2. View your sets");
@@ -113,6 +121,7 @@ public class App {
                     System.out.println("6. Log out");
                     System.out.println("7. Exit");
                 
+                    // Take user's input
                     boolean correctAnswer = false;
                     while (!correctAnswer) {
                         System.out.print("Enter your action (1-7): ");
@@ -129,6 +138,7 @@ public class App {
                         }
                     }
                 
+                    // Change password
                     if (mode == 1) {
                         Hash hasher = new Hash();
                         String oldPassword = user.getPassword();
@@ -145,7 +155,7 @@ public class App {
                         }
 
                         if (counter == 3 && !answer.equals(oldPassword)) {
-                            System.out.println("You have entered the wrong password too many time. Try again later.");
+                            System.out.println("You have entered the wrong password too many times. Try again later.");
                         } else {
                             System.out.print("Enter new password: ");
                             answer = scanner.nextLine().toLowerCase();
@@ -153,16 +163,20 @@ public class App {
                         }
                         mode = 0;
                     } else if (mode == 6) {
+                        // Log out 
                         user = new User("", "", "", false);
                         mode = 0;
                         loggedIn = false;
                     } else if (mode == 7) {
+                        // Terminate the program
                         exit = true;
                         break;
                     } else if (mode == 2) {
+                        // Print available sets
                         user.printSets();
                         mode = 0;
                     } else if (mode == 3) {
+                        // Make new set
                         try {
                             System.out.print("Subject: ");
                             String subject = scanner.next();
@@ -178,6 +192,7 @@ public class App {
                         }
                         mode = 0;
                     } else if (mode == 4) {
+                        // Go to set
                         user.printSets();
                         int id = 0;
                         
@@ -198,8 +213,7 @@ public class App {
                         }
 
                     } else if (mode == 5) {
-
-                        // Prompt user for set to delete
+                        // Delete a set
                         int set_id = 0;
                         boolean success = false;
 
@@ -220,19 +234,22 @@ public class App {
                     }
                 }  
                 
+                // For logged in user interacting with a set
                 while (user.getCurrentSet() > 0 & loggedIn) {
                     int mode = 0;
                     Set currentSet = new Set(user.getCurrentSet());
 
+                    // Print options
                     System.out.println("Hello " + user.getName() + ". What would you like to do with " + currentSet.getName() + "?");
-                    System.out.println("1. View all terms & definitions in this set");
-                    System.out.println("2. Study terms in set");
-                    System.out.println("3. Test terms in set");
-                    System.out.println("4. Add terms");
-                    System.out.println("5. Delete term");
+                    System.out.println("1. View all cards in this set");
+                    System.out.println("2. Study cards in set");
+                    System.out.println("3. Test cards in set");
+                    System.out.println("4. Add cards");
+                    System.out.println("5. Delete card");
                     System.out.println("6. Go back to main menu");
                     System.out.println("7. Exit");
 
+                    // Take user's input
                     boolean correctAnswer = false;
                     while (!correctAnswer) {
                         System.out.print("Enter your action (1-7): ");
@@ -249,9 +266,11 @@ public class App {
                         }
                     }
 
+                    // Print all cards
                     if (mode == 1) {
                         currentSet.printCards();
                     } else if (mode == 2) {
+                        // Study cards
                         // Setting study mode (case sensitivity) 
                         System.out.println("It's study time! Choose mode:\nA. Study definitions\nB. Study terms");
                         answer = "";
@@ -290,9 +309,8 @@ public class App {
                             definitions.add(definition);
                         });
 
-                        int i = 0;
-                        int counter = 0;
-                        while (testedIndex.size() < nCards && i < nCards) {
+                        int counter;
+                        while (testedIndex.size() < nCards) {
                             currentIndex = ran.nextInt(nCards);
                             counter = 0;
                         
@@ -325,6 +343,9 @@ public class App {
                                             }
                                             scanner.nextLine();
                                         }
+                                        reply = "";
+                                    } else {
+                                        testedIndex.add(currentIndex);
                                     }
                                 } else {
                                     while (!reply.trim().equals(currentTerm) && counter < 3) {
@@ -350,18 +371,17 @@ public class App {
                                             }
                                             scanner.nextLine();
                                         }
+                                        reply = "";
+                                    } else {
+                                        testedIndex.add(currentIndex);
                                     }
-                                }
-                        
-                                if (counter < 3) {
-                                    testedIndex.add(currentIndex);
-                                    i++;
                                 }
                             }
                         }
                         System.out.println("Congratulations on finishing studying this test!");
 
                     } else if (mode == 3) {
+                        // Test cards
                         // Setting test mode (case sensitivity) 
                         System.out.println("It's test time! Choose mode:\nA. Test with definitions\nB. Test with terms");
                         answer = "";
@@ -445,6 +465,7 @@ public class App {
                         System.out.println("Congratulations on finishing this test! Your score is " + score + "/100.");
 
                     } else if (mode == 4) {
+                        // Add cards
                         int nTerms = 0;
                         String term = new String();
                         String definition= new String();
@@ -453,7 +474,7 @@ public class App {
 
                         correctAnswer = false;
                         while (!correctAnswer) {
-                            System.out.print("Number of terms to add: ");
+                            System.out.print("Number of cards to add: ");
                             try {
                                 nTerms = scanner.nextInt();
                                 scanner.nextLine();
@@ -488,9 +509,10 @@ public class App {
                             term = "";
                         }
                         
-                        currentSet.addTerms(newCards);
+                        currentSet.addCards(newCards);
 
                     } else if (mode == 5) {
+                        // Delete a card
                         // Print available cards to user
                         currentSet.printCards();
 
@@ -504,11 +526,13 @@ public class App {
                             scanner.nextLine();
                         }
 
-                        currentSet.deleteTerm(answer);
+                        currentSet.deleteCard(answer);
                         answer = "";
                     } else if (mode == 6) {
+                        // Go to main menu
                         user.exitSet();
                     } else if (mode == 7) {
+                        // Terminate the program
                         exit = true;
                         break;
                     }

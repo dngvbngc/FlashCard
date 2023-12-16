@@ -1,14 +1,20 @@
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/** This helper class represents a hash object that encrypts users' passwords */
 public class Hash { 
 
+  /** The hashed string outputted by the generateHash() method */
   String hash;
 
+  /** Constructor */
   public Hash() {
     this.hash = "";
   } 
 
+  /** Encrypt a password using MD5
+   * @param password The unhashed password
+   */
   public String generateHash(String password) {
     try {
       // Create MessageDigest instance for MD5
@@ -36,6 +42,7 @@ public class Hash {
     }
   }
 
+  /* To test */
   public static void main(String[] args) {
     Hash hasher = new Hash();
     System.out.println(hasher.generateHash("hello"));

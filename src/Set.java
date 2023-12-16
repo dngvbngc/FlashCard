@@ -6,11 +6,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
+/** A class representing a study set */
 public class Set {
 
+    /** The unique auto-generated ID of the set */
     private int id;
+
+    /** The name of the set */
     private String name;
 
+    /** Constructor to make a new set.
+     * @param user_id The user to which the set belongs
+     * @param name The name of the set
+     * @param subject The subject of the set
+     * @param isNew True (insert new information into the database)/ False (do not update the data)
+     */
     public Set(int user_id, String name, String subject, boolean isNew) {
         if (isNew) {
             try {
@@ -50,10 +60,10 @@ public class Set {
                 System.out.println("New set created successfully.");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();;
-                throw new RuntimeException("Unable to create new set. Cannot connect to databse.");
+                System.out.println("Unable to create new set. Cannot connect to databse.");
             } catch (SQLException e) {
                 e.printStackTrace();;
-                throw new RuntimeException("Unable to create new set.");
+                System.out.println("Unable to create new set.");
             }            
         } else {
             // For default new set;
@@ -62,7 +72,10 @@ public class Set {
         }
     }
 
-    // To retrieve old  via id
+    /** Constructor to make a new instance of an existing set
+     * @param id The unique ID of the existing set
+     * @throws RuntimeException if invalid set ID
+     */
     public Set(int id) {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -87,21 +100,31 @@ public class Set {
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            throw new RuntimeException("Retrieving set was unsuccessful.");
+            System.out.println("Retrieving set was unsuccessful.");
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Retrieving set was unsuccessful.");
+            System.out.println("Retrieving set was unsuccessful.");
         }
     }
 
+    /** Accessor for the set's ID 
+     * @return The ID of the set
+     */
     public int getID() {
         return this.id;
     }
 
+    /** Accessor for the set's name 
+     * @return The name of the set
+     */
     public String getName() {
         return this.name;
     }
 
+    /** Accessor for all the cards in the set
+     * @return All cards in the set stored in a Hashtable
+     * @throws RuntimeException if unable to connect to database
+     */
     public Hashtable<String, String> getCards() {
         try {
             Hashtable<String, String> cards = new Hashtable<>();
@@ -135,10 +158,14 @@ public class Set {
         }
     }
 
+    /** Get the number of cards in the set
+     * @return The number of cards in the set
+     */
     public int getNumberOfCards() {
         return this.getCards().size();
     }
 
+    /** Print all cards in the set in a formatted roster */
     public void printCards() {
         Hashtable<String, String> cards = this.getCards();
         String header = "----- ALL " + this.getNumberOfCards() + " CARDS IN " + this.getName().toUpperCase()+ " -----";
@@ -155,7 +182,10 @@ public class Set {
         System.out.println();
     }
 
-    public void addTerms(Hashtable<String, String> newCards) {
+    /** Add card(s) to the set
+     * @param Hashtable<String,String> The terms and definitions to add, contained in a Hashtable
+     */
+    public void addCards(Hashtable<String, String> newCards) {
 
         // Update database with new cards
         try {
@@ -171,17 +201,20 @@ public class Set {
                     pstmt.setString(2, value);
                     int rowsAffected = pstmt.executeUpdate();
                     System.out.println(rowsAffected + " row(s) inserted: Term: " + key + ", Definition: " + value);
-                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             });
+            connection.close();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } 
     }
 
-    public void deleteTerm(String term) {
+    /** Delete a card from the set
+     * @param term The term of the card to delete
+     */
+    public void deleteCard(String term) {
         // Update database
         try {
             Class.forName("org.sqlite.JDBC");
